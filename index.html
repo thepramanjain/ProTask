@@ -22,6 +22,19 @@
             </div>
         </section>
 
+        <section class="search-section">
+            <input type="text" id="search-input" placeholder="Search tasks">
+        </section>
+
+        <section class="filter-section">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="completed">Completed</button>
+            </div>
+            <button id="clear-completed" class="text-btn">Clear Completed</button>
+        </section>
+
         <main class="task-list-container">
             <ul id="task-list"></ul>
         </main>

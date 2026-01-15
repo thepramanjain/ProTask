@@ -87,6 +87,57 @@ body {
     box-shadow: 0 6px 12px rgba(99, 102, 241, 0.25);
 }
 
+.search-section {
+    display: flex;
+}
+
+#search-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    color: var(--text);
+}
+
+.filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.filters {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-btn {
+    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    color: var(--muted);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.filter-btn.active {
+    color: #FFFFFF;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.text-btn {
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
 .task-list-container {
     min-height: 120px;
 }
