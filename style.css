@@ -139,7 +139,34 @@ body {
 }
 
 .task-list-container {
-    min-height: 120px;
+    min-height: 160px;
+}
+
+#task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+#empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 24px 0 8px;
+}
+
+.hidden {
+    display: none;
 }
 
 .stats {
