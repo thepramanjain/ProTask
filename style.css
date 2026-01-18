@@ -157,6 +157,41 @@ body {
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     background: #FFFFFF;
+    gap: 12px;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: var(--muted);
+}
+
+.task-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid #CBD5F5;
+    background: #FFFFFF;
+    cursor: pointer;
+}
+
+.task-checkbox.checked {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.task-text {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.delete-btn {
+    border: none;
+    background: #FEE2E2;
+    color: #B91C1C;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
 }
 
 #empty-state {
