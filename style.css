@@ -205,6 +205,10 @@ body {
 }
 
 .stats {
-    font-size: 0.9rem;
-    color: #475569;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
 }

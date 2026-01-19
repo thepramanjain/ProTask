@@ -3,19 +3,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const addTaskBtn = document.getElementById('add-task-btn');
     const taskList = document.getElementById('task-list');
     const emptyState = document.getElementById('empty-state');
+    const totalStats = document.getElementById('total-stats');
+    const pendingStats = document.getElementById('pending-stats');
+    const completedStats = document.getElementById('completed-stats');
 
-    let tasks = [];
+    let tasks = loadFromLocalStorage();
 
     function toggleComplete(id) {
         tasks = tasks.map(task =>
             task.id === id ? { ...task, completed: !task.completed } : task
         );
+        saveToLocalStorage();
         renderTasks();
     }
 
     function deleteTask(id) {
         tasks = tasks.filter(task => task.id !== id);
+        saveToLocalStorage();
         renderTasks();
+    }
+
+    function updateStats() {
+        const total = tasks.length;
+        const completed = tasks.filter(task => task.completed).length;
+        const pending = total - completed;
+
+        totalStats.textContent = `Total: ${total}`;
+        pendingStats.textContent = `Pending: ${pending}`;
+        completedStats.textContent = `Completed: ${completed}`;
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('protask_tasks', JSON.stringify(tasks));
+    }
+
+    function loadFromLocalStorage() {
+        const stored = localStorage.getItem('protask_tasks');
+        return stored ? JSON.parse(stored) : [];
     }
 
     function renderTasks() {
@@ -47,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         emptyState.classList.toggle('hidden', tasks.length > 0);
+        updateStats();
     }
 
     function addTask() {
@@ -60,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         taskInput.value = '';
+        saveToLocalStorage();
         renderTasks();
     }
 
