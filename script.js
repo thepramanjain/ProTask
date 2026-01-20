@@ -1,13 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
     const taskInput = document.getElementById('task-input');
+    const dueDateInput = document.getElementById('due-date-input');
+    const prioritySelect = document.getElementById('priority-select');
+    const searchInput = document.getElementById('search-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     const taskList = document.getElementById('task-list');
     const emptyState = document.getElementById('empty-state');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const clearCompletedBtn = document.getElementById('clear-completed');
     const totalStats = document.getElementById('total-stats');
     const pendingStats = document.getElementById('pending-stats');
     const completedStats = document.getElementById('completed-stats');
 
     let tasks = loadFromLocalStorage();
+    let currentFilter = 'all';
+    let searchQuery = '';
 
     function toggleComplete(id) {
         tasks = tasks.map(task =>
@@ -45,7 +52,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderTasks() {
         taskList.innerHTML = '';
 
-        tasks.forEach(task => {
+        const filteredTasks = tasks.filter(task => {
+            const matchesSearch = task.text.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesFilter = currentFilter === 'all' ||
+                (currentFilter === 'pending' && !task.completed) ||
+                (currentFilter === 'completed' && task.completed);
+            return matchesSearch && matchesFilter;
+        });
+
+        filteredTasks.forEach(task => {
             const li = document.createElement('li');
             li.className = `task-item ${task.completed ? 'completed' : ''}`;
 
@@ -58,6 +73,21 @@ document.addEventListener('DOMContentLoaded', () => {
             text.className = 'task-text';
             text.textContent = task.text;
 
+            const meta = document.createElement('div');
+            meta.className = 'task-meta';
+
+            if (task.dueDate) {
+                const due = document.createElement('span');
+                due.className = 'task-due';
+                due.textContent = `Due ${task.dueDate}`;
+                meta.appendChild(due);
+            }
+
+            const badge = document.createElement('span');
+            badge.className = `priority-badge priority-${task.priority}`;
+            badge.textContent = task.priority;
+            meta.appendChild(badge);
+
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'delete-btn';
             deleteBtn.type = 'button';
@@ -66,11 +96,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             li.appendChild(checkbox);
             li.appendChild(text);
+            const content = document.createElement('div');
+            content.className = 'task-content';
+            content.appendChild(text);
+            content.appendChild(meta);
+
+            li.appendChild(content);
             li.appendChild(deleteBtn);
             taskList.appendChild(li);
         });
 
-        emptyState.classList.toggle('hidden', tasks.length > 0);
+        emptyState.classList.toggle('hidden', filteredTasks.length > 0);
         updateStats();
     }
 
@@ -81,10 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
         tasks.unshift({
             id: Date.now(),
             text,
-            completed: false
+            completed: false,
+            dueDate: dueDateInput.value || '',
+            priority: prioritySelect.value
         });
 
         taskInput.value = '';
+        dueDateInput.value = '';
         saveToLocalStorage();
         renderTasks();
     }
@@ -92,6 +131,26 @@ document.addEventListener('DOMContentLoaded', () => {
     addTaskBtn.addEventListener('click', addTask);
     taskInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') addTask();
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderTasks();
+    });
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            renderTasks();
+        });
+    });
+
+    clearCompletedBtn.addEventListener('click', () => {
+        tasks = tasks.filter(task => !task.completed);
+        saveToLocalStorage();
+        renderTasks();
     });
 
     renderTasks();

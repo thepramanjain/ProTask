@@ -16,6 +16,14 @@
         <section class="input-section">
             <div class="input-group">
                 <input type="text" id="task-input" placeholder="What needs to be done?">
+                <div class="input-meta">
+                    <input type="date" id="due-date-input" aria-label="Due date">
+                    <select id="priority-select" aria-label="Priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
                 <div class="input-actions">
                     <button id="add-task-btn" class="primary-btn">Add Task</button>
                 </div>
