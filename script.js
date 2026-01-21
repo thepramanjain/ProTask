@@ -11,10 +11,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalStats = document.getElementById('total-stats');
     const pendingStats = document.getElementById('pending-stats');
     const completedStats = document.getElementById('completed-stats');
+    const themeToggle = document.getElementById('theme-toggle');
 
     let tasks = loadFromLocalStorage();
     let currentFilter = 'all';
     let searchQuery = '';
+
+    // Theme Management
+    const initTheme = () => {
+        const savedTheme = localStorage.getItem('protask_theme') || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.querySelector('.icon').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    };
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('protask_theme', newTheme);
+        themeToggle.querySelector('.icon').textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+
+    initTheme();
 
     function toggleComplete(id) {
         tasks = tasks.map(task =>
