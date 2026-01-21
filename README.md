@@ -14,3 +14,4 @@ A polished, lightweight To-Do web app with priorities, due dates, filters, and l
 
 1. Open index.html in a browser.
 2. Edit style.css and script.js to customize.
+
