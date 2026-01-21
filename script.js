@@ -12,10 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const pendingStats = document.getElementById('pending-stats');
     const completedStats = document.getElementById('completed-stats');
     const themeToggle = document.getElementById('theme-toggle');
+    const suggestionsBox = document.getElementById('suggestions-box');
+    const suggestionsList = document.getElementById('suggestions-list');
 
     let tasks = loadFromLocalStorage();
     let currentFilter = 'all';
     let searchQuery = '';
+
+    const SUGGESTED_TASKS = [
+        "Drink Water", "Exercise", "Read 10 pages", "Meditate", 
+        "Check Email", "Plan Tomorrow", "Meeting", "Project Review"
+    ];
 
     // Theme Management
     const initTheme = () => {
@@ -156,6 +163,42 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value;
         renderTasks();
+
+        if (searchQuery.length > 0) {
+            const matches = SUGGESTED_TASKS.filter(t => 
+                t.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            
+            if (matches.length > 0) {
+                suggestionsList.innerHTML = '';
+                matches.forEach(match => {
+                    const chip = document.createElement('div');
+                    chip.className = 'suggestion-chip';
+                    chip.textContent = match;
+                    chip.onclick = () => {
+                        taskInput.value = match;
+                        searchInput.value = '';
+                        searchQuery = '';
+                        suggestionsBox.classList.add('hidden');
+                        renderTasks();
+                        taskInput.focus();
+                    };
+                    suggestionsList.appendChild(chip);
+                });
+                suggestionsBox.classList.remove('hidden');
+            } else {
+                suggestionsBox.classList.add('hidden');
+            }
+        } else {
+            suggestionsBox.classList.add('hidden');
+        }
+    });
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!suggestionsBox.contains(e.target) && e.target !== searchInput) {
+            suggestionsBox.classList.add('hidden');
+        }
     });
 
     filterBtns.forEach(btn => {
